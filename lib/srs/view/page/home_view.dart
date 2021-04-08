@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loja/core/widgets/app_bar_widget.dart';
 import 'package:loja/srs/view/widgets/custom_bottombar.dart';
 import 'package:loja/srs/view/widgets/list_builder.dart';
 
@@ -20,6 +21,7 @@ class NikeShoesStore extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+      appBar: AppBarWidget(),
       body: Stack(
         children: [
           ListViewNikeShoes(),

@@ -55,7 +55,7 @@ class NikeShoesItem extends StatelessWidget {
                 ),
                 Positioned(
                   top: 20,
-                  left: 20,
+                  right: -15,
                   height: itemHight * 0.8,
                   child: Hero(
                     tag: 'image_${shoesItem.model}',

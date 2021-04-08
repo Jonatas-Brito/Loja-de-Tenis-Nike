@@ -1,137 +1,47 @@
 import 'package:flutter/material.dart';
 
-class ListButtonsSize extends StatelessWidget {
+class ListButtonsSize extends StatefulWidget {
+  final List<String> sizes;
+  const ListButtonsSize({this.sizes});
+  @override
+  State<ListButtonsSize> createState() => _ListButtonsSizeState();
+}
+
+class _ListButtonsSizeState extends State<ListButtonsSize> {
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(left: 5, right: 5),
-          child: Container(
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(12)),
-                color: Colors.black),
-            height: 40,
-            width: 70,
-            child: ClipRRect(
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15),
+      child: GridView.builder(
+          itemCount: widget.sizes.length,
+          gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+              maxCrossAxisExtent: 90,
+              mainAxisExtent: 50,
+              crossAxisSpacing: 5,
+              mainAxisSpacing: 5,
+              childAspectRatio: 22),
+          itemBuilder: (context, index) {
+            String size = widget.sizes[index];
+
+            return ClipRRect(
               borderRadius: BorderRadius.all(
                 Radius.circular(12),
               ),
-              child: RaisedButton(
-                color: Colors.white,
+              child: ElevatedButton(
+                style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all(Colors.grey.shade200)),
                 child: Text(
-                  'US 6',
+                  size,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
+                    color: Colors.black,
                   ),
                 ),
                 onPressed: () {},
               ),
-            ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(right: 5),
-          child: Container(
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(12)),
-                color: Colors.black),
-            height: 40,
-            width: 70,
-            child: ClipRRect(
-              borderRadius: BorderRadius.all(
-                Radius.circular(12),
-              ),
-              child: RaisedButton(
-                color: Colors.white,
-                child: Text(
-                  'US 8',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                onPressed: () {},
-              ),
-            ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(right: 5),
-          child: Container(
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(12)),
-                color: Colors.black),
-            height: 40,
-            width: 70,
-            child: ClipRRect(
-              borderRadius: BorderRadius.all(
-                Radius.circular(12),
-              ),
-              child: RaisedButton(
-                color: Colors.white,
-                child: Text(
-                  'US 8',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                onPressed: () {},
-              ),
-            ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(right: 5),
-          child: Container(
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(12)),
-                color: Colors.black),
-            height: 40,
-            width: 70,
-            child: ClipRRect(
-              borderRadius: BorderRadius.all(
-                Radius.circular(12),
-              ),
-              child: RaisedButton(
-                color: Colors.white,
-                child: Text(
-                  'US 9',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                onPressed: () {},
-              ),
-            ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(right: 5),
-          child: Container(
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(12)),
-                color: Colors.black),
-            height: 40,
-            width: 70,
-            child: ClipRRect(
-              borderRadius: BorderRadius.all(
-                Radius.circular(12),
-              ),
-              child: RaisedButton(
-                color: Colors.white,
-                child: Text(
-                  'US 11',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                onPressed: () {},
-              ),
-            ),
-          ),
-        ),
-      ],
+            );
+          }),
     );
   }
 }

@@ -1,13 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:loja/core/widgets/app_bar_widget.dart';
 import 'package:loja/srs/controllers/animation/shake.controller.dart';
 import 'package:loja/srs/models/shoes_model.dart';
 import 'package:loja/srs/view/page/shopping_bag_view.dart';
 
-class NikeShoesDetails extends StatelessWidget {
+class NikeShoesDetails extends StatefulWidget {
   final NikeShoes shoes;
-  final ValueNotifier<bool> notifierButtonsVisible = ValueNotifier(false);
 
   NikeShoesDetails({Key key, this.shoes}) : super(key: key);
+
+  @override
+  State<NikeShoesDetails> createState() => _NikeShoesDetailsState();
+}
+
+class _NikeShoesDetailsState extends State<NikeShoesDetails> {
+  bool firstAnimation = true;
+  int valor = 0;
+
+  final ValueNotifier<bool> notifierButtonsVisible = ValueNotifier(false);
 
   Future<void> _openShoppingBag(context) async {
     notifierButtonsVisible.value = false;
@@ -16,7 +26,7 @@ class NikeShoesDetails extends StatelessWidget {
         pageBuilder: (_, animation1, __) {
           return FadeTransition(
             opacity: animation1,
-            child: NikeShoppingBag(shoes: shoes),
+            child: NikeShoppingBag(shoes: widget.shoes),
           );
         }));
     notifierButtonsVisible.value = true;
@@ -31,9 +41,9 @@ class NikeShoesDetails extends StatelessWidget {
         children: [
           Positioned.fill(
             child: Hero(
-              tag: 'background_${shoes.model}',
+              tag: 'background_${widget.shoes.model}',
               child: Container(
-                color: Color(shoes.color),
+                color: Color(widget.shoes.color),
               ),
             ),
           ),
@@ -44,7 +54,7 @@ class NikeShoesDetails extends StatelessWidget {
             child: SizedBox(
               height: itemHight * 0.6,
               child: Hero(
-                tag: 'vulgo_${shoes.model}',
+                tag: 'vulgo_${widget.shoes.model}',
                 child: ShakeTransition(
                   axis: Axis.vertical,
                   duration: Duration(milliseconds: 800),
@@ -53,7 +63,7 @@ class NikeShoesDetails extends StatelessWidget {
                     color: Colors.transparent,
                     child: FittedBox(
                       child: Text(
-                        shoes.vulgo,
+                        widget.shoes.vulgo,
                         style: TextStyle(
                           color: Colors.black.withOpacity(0.07),
                           fontWeight: FontWeight.bold,
@@ -66,22 +76,29 @@ class NikeShoesDetails extends StatelessWidget {
             ),
           ),
           PageView.builder(
-              itemCount: shoes.image.length,
+              itemCount: widget.shoes.image.length,
               itemBuilder: (context, index) {
+                if (firstAnimation && valor != 0) {
+                  firstAnimation = false;
+                }
+                if (valor == index) {
+                  valor++;
+                }
+
                 final tag = index == 0
-                    ? 'image_${shoes.model}'
-                    : 'image_${shoes.model}_$index';
+                    ? 'image_${widget.shoes.model}'
+                    : 'image_${widget.shoes.model}_$index';
                 return Container(
                   child: Hero(
                     tag: tag,
                     child: ShakeTransition(
                       axis: Axis.vertical,
-                      duration: index == 0
+                      duration: index == 0 && firstAnimation
                           ? const Duration(milliseconds: 800)
                           : Duration.zero,
                       offset: 50,
                       child: Image.asset(
-                        shoes.image[index],
+                        widget.shoes.image[index],
                       ),
                     ),
                   ),
@@ -99,25 +116,22 @@ class NikeShoesDetails extends StatelessWidget {
     });
 
     return Scaffold(
-        appBar: AppBar(
-          toolbarHeight: 70,
-          elevation: 0,
-          backgroundColor: Colors.white,
-          centerTitle: true,
-          title: Image.asset(
-            'assets/images/logo.png',
-            height: 25,
-          ),
-          leading: BackButton(
-            color: Colors.black,
+        appBar: AppBarWidget(
+          leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(
+              Icons.arrow_back_ios,
+              color: Colors.black,
+            ),
           ),
         ),
         body: Stack(
           fit: StackFit.expand,
           children: <Widget>[
             Positioned.fill(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
+              child: ListView(
                 children: [
                   _buildCarousel(context),
                   Padding(
@@ -133,7 +147,7 @@ class NikeShoesDetails extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                shoes.model,
+                                widget.shoes.model,
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold, fontSize: 18),
                               ),
@@ -143,7 +157,7 @@ class NikeShoesDetails extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
                                     Text(
-                                      '\$${shoes.oldPrice.toString()}',
+                                      '\$${widget.shoes.oldPrice.toString()}',
                                       style: TextStyle(
                                           color: Colors.red,
                                           decoration:
@@ -153,7 +167,7 @@ class NikeShoesDetails extends StatelessWidget {
                                     Padding(
                                       padding: const EdgeInsets.only(top: 5),
                                       child: Text(
-                                        '\$${shoes.price.toString()}',
+                                        '\$${widget.shoes.price.toString()}',
                                         style: TextStyle(
                                             color: Colors.black,
                                             fontWeight: FontWeight.bold,
@@ -174,30 +188,29 @@ class NikeShoesDetails extends StatelessWidget {
                             child: Text('TAMANHOS DISPONÍVEIS')),
                         const SizedBox(height: 20),
                         ShakeTransition(
-                          curve: Curves.elasticOut,
-                          offset: 300,
-                          duration: Duration(milliseconds: 1200),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              _ShoeSizeItem(
-                                text: '6',
-                              ),
-                              _ShoeSizeItem(
-                                text: '7',
-                              ),
-                              _ShoeSizeItem(
-                                text: '9',
-                              ),
-                              _ShoeSizeItem(
-                                text: '10',
-                              ),
-                              _ShoeSizeItem(
-                                text: '11',
-                              ),
-                            ],
-                          ),
-                        ),
+                            curve: Curves.elasticOut,
+                            offset: 300,
+                            duration: Duration(milliseconds: 1200),
+                            child: SizedBox(
+                              width: 250,
+                              height: 150,
+                              child: GridView.builder(
+                                  itemCount: widget.shoes.sizes.length,
+                                  physics: NeverScrollableScrollPhysics(),
+                                  gridDelegate:
+                                      SliverGridDelegateWithMaxCrossAxisExtent(
+                                          maxCrossAxisExtent: 90,
+                                          mainAxisExtent: 30,
+                                          crossAxisSpacing: 5,
+                                          mainAxisSpacing: 5,
+                                          childAspectRatio: 22),
+                                  itemBuilder: (context, index) {
+                                    String size = widget.shoes.sizes[index];
+                                    return _ShoeSizeItem(
+                                      text: size,
+                                    );
+                                  }),
+                            )),
                         const SizedBox(height: 20),
                         ShakeTransition(
                             curve: Curves.elasticOut,
@@ -259,16 +272,11 @@ class _ShoeSizeItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(
-        top: 10,
-        right: 30,
-      ),
-      child: Text(
-        'US$text',
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-        ),
+    return Text(
+      '$text',
+      textAlign: TextAlign.center,
+      style: TextStyle(
+        fontWeight: FontWeight.bold,
       ),
     );
   }

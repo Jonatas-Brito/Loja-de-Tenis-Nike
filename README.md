@@ -1,6 +1,6 @@
 # loja
 
-A new Flutter project.
+Uma loja de tenis desenvolvida em Flutter
 
 ## Getting Started
 

@@ -105,8 +105,8 @@ class _NikeShoppingBagState extends State<NikeShoppingBag>
         );
       },
       child: Container(
-        height: (size.height * 0.7 * _animationResize.value)
-            .clamp(_buttonCircularSizes, size.height * 0.7),
+        height: (size.height * 1.7 * _animationResize.value)
+            .clamp(_buttonCircularSizes, size.height * 2.7),
         width: (size.width * _animationResize.value)
             .clamp(_buttonCircularSizes, size.width),
         decoration: BoxDecoration(
@@ -174,7 +174,7 @@ class _NikeShoppingBagState extends State<NikeShoppingBag>
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 20, bottom: 15),
+                padding: const EdgeInsets.only(top: 20),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -191,7 +191,11 @@ class _NikeShoppingBagState extends State<NikeShoppingBag>
                   ],
                 ),
               ),
-              ListButtonsSize(),
+              Expanded(
+                child: ListButtonsSize(
+                  sizes: widget.shoes.sizes,
+                ),
+              ),
             ]
           ],
         ),
@@ -211,6 +215,8 @@ class _NikeShoppingBagState extends State<NikeShoppingBag>
                 .clamp(_buttonCircularSize, _buttonSize);
             final panelSizeWidth = (size.width * _animationResize.value)
                 .clamp(_buttonCircularSiz, size.width);
+            final panelSizeHeight = (size.height * _animationResize.value)
+                .clamp(_buttonCircularSiz, size.height);
             return Stack(
               fit: StackFit.expand,
               children: <Widget>[
@@ -229,11 +235,11 @@ class _NikeShoppingBagState extends State<NikeShoppingBag>
                     children: [
                       if (_animationMovementIn.value != 1)
                         Positioned(
-                          top: size.height * 0.3 +
-                              (_animationMovementIn.value * 296),
+                          top: size.height * 0.1 +
+                              (_animationMovementIn.value * size.height * .654),
                           left: size.width / 2 - panelSizeWidth / 2,
                           width: panelSizeWidth,
-                          height: panelSizeWidth,
+                          height: panelSizeHeight,
                           child: _buildPanel(),
                         ),
                       Positioned(
